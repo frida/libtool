@@ -1275,7 +1275,15 @@ func_quote_for_eval ()
     while test 0 -lt $#; do
       case $1 in
         *[\\\`\"\$]*)
-	  _G_unquoted_arg=`printf '%s\n' "$1" |$SED "$sed_quote_subst"` ;;
+          if test set = "${BASH_VERSION+set}"; then
+            _G_unquoted_arg=${1//\\/\\\\}
+            _G_unquoted_arg=${_G_unquoted_arg//\"/\\\"}
+            _G_unquoted_arg=${_G_unquoted_arg//\$/\\\$}
+            _G_unquoted_arg=${_G_unquoted_arg//\`/\\\`}
+          else
+            _G_unquoted_arg=`printf '%s\n' "$1" |$SED "$sed_quote_subst"`
+          fi
+          ;;
         *)
           _G_unquoted_arg=$1 ;;
       esac

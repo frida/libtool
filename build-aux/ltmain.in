@@ -3346,7 +3346,11 @@ else
   if test \"\$libtool_execute_magic\" != \"$magic\"; then
     file=\"\$0\""
 
-    qECHO=`$ECHO "$ECHO" | $SED "$sed_quote_subst"`
+    if test set = "${BASH_VERSION+set}"; then
+      qECHO=$(_G=$($ECHO "$ECHO");_G=${_G//\\/\\\\};_G=${_G//\"/\\\"};_G=${_G//\$/\\\$};_G=${_G//\`/\\\`};printf '%s\n' "$_G")
+    else
+      qECHO=`$ECHO "$ECHO" | $SED "$sed_quote_subst"`
+    fi
     $ECHO "\
 
 # A function that is used when there is no print builtin or printf.
