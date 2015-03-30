@@ -2841,8 +2841,17 @@ linux* | k*bsd*-gnu | kopensolaris*-gnu | gnu*)
   version_type=linux # correct to gnu/linux during the next big refactor
   need_lib_prefix=no
   need_version=no
-  library_names_spec='$libname$release$shared_ext$versuffix $libname$release$shared_ext$major $libname$shared_ext'
-  soname_spec='$libname$release$shared_ext$major'
+  case $host_os in
+  # This must be Linux Android ELF which has no support for versioned libs.
+  linux-android*)
+    library_names_spec='$libname$shared_ext'
+    soname_spec='$libname$shared_ext'
+    ;;
+  *)
+     library_names_spec='$libname$release$shared_ext$versuffix $libname$release$shared_ext$major $libname$shared_ext'
+     soname_spec='$libname$release$shared_ext$major'
+    ;;
+  esac
   finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
   shlibpath_var=LD_LIBRARY_PATH
   shlibpath_overrides_runpath=no
