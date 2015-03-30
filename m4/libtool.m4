@@ -7528,6 +7528,7 @@ if AC_TRY_EVAL(ac_compile); then
   # the conftest object file.
   pre_test_object_deps_done=no
 
+  prev=
   for p in `eval "$output_verbose_link_cmd"`; do
     case $prev$p in
 
