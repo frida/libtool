@@ -5708,6 +5708,11 @@ func_mode_link ()
 	  fi
 	  continue
 	  ;;
+	-Bstatic|-Bdynamic)
+	  deplibs="$deplib $deplibs"
+	  test lib = "$linkmode" && newdependency_libs="$deplib $newdependency_libs"
+	  continue
+	  ;;
 	-l*)
 	  if test lib != "$linkmode" && test prog != "$linkmode"; then
 	    func_warning "'-l' is ignored for archives/objects"

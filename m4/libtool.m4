@@ -7528,6 +7528,10 @@ if AC_TRY_EVAL(ac_compile); then
   # the conftest object file.
   pre_test_object_deps_done=no
 
+  # Preserve the desired link mode, typically influenced by flags
+  # like -static-libgcc, -static-libstdc++, etc.
+  link_mode=default
+
   prev=
   for p in `eval "$output_verbose_link_cmd"`; do
     case $prev$p in
@@ -7568,14 +7572,35 @@ if AC_TRY_EVAL(ac_compile); then
 	 # linked, so don't bother handling this case.
 	 esac
        else
+	 s=$prev$p
+
+	 case $link_mode in
+	 static_pending)
+	   s="-Bstatic $s"
+	   link_mode=static
+	   ;;
+	 dynamic_pending)
+	   s="-Bdynamic $s"
+	   link_mode=dynamic
+	   ;;
+	 esac
+
 	 if test -z "$_LT_TAGVAR(postdeps, $1)"; then
-	   _LT_TAGVAR(postdeps, $1)=$prev$p
+	   _LT_TAGVAR(postdeps, $1)=$s
 	 else
-	   _LT_TAGVAR(postdeps, $1)="${_LT_TAGVAR(postdeps, $1)} $prev$p"
+	   _LT_TAGVAR(postdeps, $1)="${_LT_TAGVAR(postdeps, $1)} $s"
 	 fi
        fi
        prev=
        ;;
+
+    -Bstatic)
+      link_mode=static_pending
+      ;;
+
+    -Bdynamic)
+      link_mode=dynamic_pending
+      ;;
 
     *.lto.$objext) ;; # Ignore GCC LTO objects
     *.$objext)
@@ -7583,6 +7608,7 @@ if AC_TRY_EVAL(ac_compile); then
        # once in the compiler output.
        if test "$p" = "conftest.$objext"; then
 	 pre_test_object_deps_done=yes
+	 link_mode=default
 	 continue
        fi
 
@@ -7605,6 +7631,10 @@ if AC_TRY_EVAL(ac_compile); then
 
     esac
   done
+
+  if test static = "$link_mode"; then
+    _LT_TAGVAR(postdeps, $1)="${_LT_TAGVAR(postdeps, $1)} -Bdynamic"
+  fi
 
   # Clean up.
   rm -f a.out a.exe
